@@ -33,8 +33,15 @@ if __name__ == "__main__":
     st.plotly_chart(go.Figure(data=plot_single_sales))
 
     """
+    Source: @Wiki, https://w.atwiki.jp/orideta/pages/70.html
+    """
+
+    """
     ## Album sales
     """
     album_sales = utils.load_album_sales(manager)
     plot_album_sales = [go.Bar(x=album_sales["Title"], y=album_sales["Sales"])]
     st.plotly_chart(go.Figure(data=plot_album_sales))
+    """
+    Source: @Wiki, https://w.atwiki.jp/orideta/pages/182.html
+    """
