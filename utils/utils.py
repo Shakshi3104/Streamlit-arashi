@@ -83,6 +83,22 @@ def find_songs_from_songwriter(all_songs, info, writer_select):
     return selected_info
 
 
+@st.cache
+def load_single_sales(manager: PathManager = PathManager()):
+    single_sales = pd.read_csv(manager.data_path + "Single sales.csv")
+    single_sales.columns = ["Title", "Best rank", "Ranked week", "Sales", "Release"]
+
+    return single_sales
+
+
+@st.cache
+def load_album_sales(manager: PathManager = PathManager()):
+    album_sales = pd.read_csv(manager.data_path + "Album sales.csv")
+    album_sales.columns = ["Title", "Best rank", "Ranked week", "Sales", "Release"]
+
+    return album_sales
+
+
 if __name__ == "__main__":
     manager = PathManager("../ARASHI List/")
-    all, writes, info = load_all_songs(manager)
+    all_, writes, info = load_all_songs(manager)
