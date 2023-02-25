@@ -30,5 +30,5 @@ def find_sales(url, filename):
 
 
 if __name__ == "__main__":
-    find_sales("https://w.atwiki.jp/orideta/pages/70.html", "../ARASHI List/Single sales.csv")
-    find_sales("https://w.atwiki.jp/orideta/pages/182.html", "../ARASHI List/Album sales.csv")
+    find_sales("https://w.atwiki.jp/orideta/pages/70.html", "../data/Single sales.csv")
+    find_sales("https://w.atwiki.jp/orideta/pages/182.html", "../data/Album sales.csv")

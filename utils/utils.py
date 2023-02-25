@@ -1,20 +1,14 @@
-import os
 import pandas as pd
-import numpy as np
+
 import streamlit as st
 
 from pathlib import Path
-import pickle
-
-
-class PathManager:
-    def __init__(self, work_dir="ARASHI List/"):
-        self.data_path = work_dir
 
 
 @st.cache
-def load_all_songs(manager: PathManager = PathManager()):
-    all_songs = pd.read_csv(manager.data_path + "All Songs-ARASHI All Songs Rest.csv")
+def load_all_songs(dirpath):
+    dirpath = Path(dirpath)
+    all_songs = pd.read_csv(dirpath / "All Songs-All Songs.csv")
 
     info = []
     all_writers = []
@@ -28,7 +22,10 @@ def load_all_songs(manager: PathManager = PathManager()):
             maker_ = maker.replace("作詞：", "").replace("作詞・作曲：", "").replace("作詞・作曲・編曲：", "") \
                 .replace("作曲：", "").replace("作曲・編曲：", "").replace("オーケストラ編曲：", "").replace("編曲：", "") \
                 .replace("Rap詞：", "").replace("All Rap presented by ", "") \
-                .replace("Written by ", "").replace("Produced by ", "").replace("Track produced by ", "")
+                .replace("Written by ", "").replace("Produced by ", "").replace("Track produced by ", "") \
+                .replace("Music by ", "").replace("Remixed by ", "").replace("Rap by ", "").replace("Lyrics by ", "") \
+                .replace("Arranged by ", "").replace("Track production by ", "") \
+                .replace("Additional track production by ", "")
 
             maker_ = maker_.replace(" / ", ", ")
             maker_ = maker_.split(", ")
@@ -84,21 +81,23 @@ def find_songs_from_songwriter(all_songs, info, writer_select):
 
 
 @st.cache
-def load_single_sales(manager: PathManager = PathManager()):
-    single_sales = pd.read_csv(manager.data_path + "Single sales.csv")
+def load_single_sales(dirpath: str):
+    dirpath = Path(dirpath)
+    single_sales = pd.read_csv(dirpath / "Single sales.csv")
     single_sales.columns = ["Title", "Best rank", "Ranked week", "Sales", "Release"]
 
     return single_sales
 
 
 @st.cache
-def load_album_sales(manager: PathManager = PathManager()):
-    album_sales = pd.read_csv(manager.data_path + "Album sales.csv")
+def load_album_sales(dirpath: str):
+    dirpath = Path(dirpath)
+    album_sales = pd.read_csv(dirpath / "Album sales.csv")
     album_sales.columns = ["Title", "Best rank", "Ranked week", "Sales", "Release"]
 
     return album_sales
 
 
 if __name__ == "__main__":
-    manager = PathManager("../ARASHI List/")
-    all_, writes, info = load_all_songs(manager)
+    dirpath = "../data/"
+    all_, writes, info = load_all_songs(dirpath)
