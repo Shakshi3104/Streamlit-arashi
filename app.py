@@ -4,7 +4,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from st_aggrid import AgGrid
 
-from utils import utils
+from utils import loader, music_parser
 
 
 def release_type_to_color(x) -> str:
@@ -25,8 +25,9 @@ if __name__ == "__main__":
 
     # データの読み込み
     dirpath = "./data/"
-    all_songs, all_writers, info = utils.load_all_songs(dirpath)
-    songs_lives_cross, counted_live_songs, live_info = utils.load_live_info(dirpath)
+    all_songs, all_writers, info = loader.load_all_songs(dirpath)
+    songs_lives_cross, counted_live_songs, live_info = loader.load_live_info(dirpath)
+    play_counts = music_parser.load_arashi_play_counts(dirpath)
 
     # 全曲リストとライブで披露された回数をマージする
     counted_live_songs = pd.merge(counted_live_songs, all_songs)
@@ -53,7 +54,7 @@ if __name__ == "__main__":
         """
 
     with cols[2]:
-        rap_songs = utils.find_songs_from_songwriter(all_songs, info, "櫻井翔")
+        rap_songs = loader.find_songs_from_songwriter(all_songs, info, "櫻井翔")
         st.metric("Songs with rap by Sho Sakurai", f"{rap_songs['曲名'].count()}")
         f"""
         Single: {rap_songs[rap_songs['タイプ'] == 'シングル']['曲名'].count()}, 
@@ -62,7 +63,7 @@ if __name__ == "__main__":
         """
 
     # タブ
-    tabs = st.tabs(["Concert", "Songs"])
+    tabs = st.tabs(["Concert", "Songwriter", "Play count"])
 
     with tabs[0]:
 
@@ -136,12 +137,16 @@ if __name__ == "__main__":
         )
 
         st.write("Find ARASHI songs written by {}".format(writer_select))
-        selected_songs = utils.find_songs_from_songwriter(all_songs, info, writer_select)
+        selected_songs = loader.find_songs_from_songwriter(all_songs, info, writer_select)
         AgGrid(selected_songs)
 
+    with tabs[2]:
         """
         ### All songs
         """
-        show_all = st.checkbox("Show all songs information")
+        play_counts = pd.merge(all_songs, play_counts, left_on="曲名", right_on="Name", how="left").drop(columns="Name")
+        play_counts["Play Count"] = play_counts["Play Count"].fillna(0)
+
+        show_all = st.checkbox("Show all")
         if show_all:
-            AgGrid(all_songs)
+            AgGrid(play_counts)
