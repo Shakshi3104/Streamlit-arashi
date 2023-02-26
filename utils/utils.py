@@ -57,6 +57,7 @@ def find_songs_from_songwriter(all_songs, info, writer_select):
     names = []
     writers = []
     release_year = []
+    release_type = []
 
     for i, song_info in enumerate(info):
         if writer_select in song_info["Writers"]:
@@ -64,6 +65,7 @@ def find_songs_from_songwriter(all_songs, info, writer_select):
             names += [line["曲名"]]
             writers += [line["クレジット"]]
             release_year += [line["リリース年"]]
+            release_type += [line["タイプ"]]
 
         if writer_select == "櫻井翔":
             if "SHOW" in song_info["Writers"] or "Sho Sakurai" in song_info["Writers"]:
@@ -71,10 +73,12 @@ def find_songs_from_songwriter(all_songs, info, writer_select):
                 names += [line["曲名"]]
                 writers += [line["クレジット"]]
                 release_year += [line["リリース年"]]
+                release_type += [line["タイプ"]]
 
     selected_info = pd.DataFrame({"曲名": names,
                                   "クレジット": writers,
-                                  "リリース年": release_year})
+                                  "リリース年": release_year,
+                                  "タイプ": release_type})
 
     return selected_info
 

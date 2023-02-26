@@ -33,7 +33,7 @@ if __name__ == "__main__":
     songs_lives_cross = pd.merge(all_songs, songs_lives_cross, left_on="曲名", right_on="曲名").fillna(0)
 
     # サマリー
-    cols = st.columns(2)
+    cols = st.columns(3)
     # リリースされた曲数
     with cols[0]:
         st.metric("All songs", f"{all_songs['曲名'].count()}")
@@ -50,6 +50,15 @@ if __name__ == "__main__":
         Single: {counted_live_songs[counted_live_songs['タイプ'] == 'シングル']['曲名'].count()}, 
         c/w: {counted_live_songs[counted_live_songs['タイプ'] == 'カップリング']['曲名'].count()}, 
         Album: {counted_live_songs[counted_live_songs['タイプ'] == 'アルバム']['曲名'].count()}
+        """
+
+    with cols[2]:
+        rap_songs = utils.find_songs_from_songwriter(all_songs, info, "櫻井翔")
+        st.metric("Songs with rap by Sho Sakurai", f"{rap_songs['曲名'].count()}")
+        f"""
+        Single: {rap_songs[rap_songs['タイプ'] == 'シングル']['曲名'].count()}, 
+        c/w: {rap_songs[rap_songs['タイプ'] == 'カップリング']['曲名'].count()}, 
+        Album: {rap_songs[rap_songs['タイプ'] == 'アルバム']['曲名'].count()}
         """
 
     """
