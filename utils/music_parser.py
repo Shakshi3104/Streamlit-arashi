@@ -20,7 +20,7 @@ def load_music_library(dirpath):
 
 def load_arashi_play_counts(dirpath):
     tracks, date_ = load_music_library(dirpath)
-    tracks = tracks[tracks["Artist"] == "嵐"].reset_index(drop=True)
+    tracks = tracks[tracks["Album Artist"] == "嵐"].reset_index(drop=True)
 
     # 表記揺れを直す
     replace_dict = {
