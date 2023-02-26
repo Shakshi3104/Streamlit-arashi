@@ -149,12 +149,35 @@ if __name__ == "__main__":
         AgGrid(selected_songs)
 
     with tabs[2]:
-        """
-        ### All songs
-        """
         play_counts = pd.merge(all_songs, play_counts, left_on="曲名", right_on="Name", how="left").drop(columns="Name")
         play_counts["Play Count"] = play_counts["Play Count"].fillna(0)
 
+        """
+        ### Play Top 30
+        """
+        top30_play_songs = play_counts.sort_values(by="Play Count", ascending=False)[:30]
+
+        # 棒グラフ
+        colors = list(map(lambda x: release_type_to_color(x), top30_play_songs["タイプ"]))
+        fig = go.Figure(
+            go.Bar(
+                x=top30_play_songs["Play Count"],
+                y=top30_play_songs["曲名"],
+                hovertext=top30_play_songs["リリース年"],
+                orientation='h',
+                hovertemplate="<b>%{y}</b> (%{hovertext}年): %{x}回<extra></extra>",
+                showlegend=False,
+                marker_color=colors,
+            ))
+        fig.update_layout(yaxis=dict(autorange="reversed"),
+                          width=None,
+                          height=None,
+                          autosize=True)
+        st.plotly_chart(fig)
+
+        """
+        ### All songs
+        """
         show_all = st.checkbox("Show all")
         if show_all:
             AgGrid(play_counts)
