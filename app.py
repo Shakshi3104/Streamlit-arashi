@@ -180,4 +180,4 @@ if __name__ == "__main__":
         """
         show_all = st.checkbox("Show all")
         if show_all:
-            AgGrid(play_counts)
+            AgGrid(play_counts, fit_columns_on_grid_load=True)
