@@ -8,7 +8,7 @@ import re
 import unicodedata
 
 
-@st.cache
+@st.cache_data
 def load_all_songs(dirpath):
     dirpath = Path(dirpath)
     all_songs = pd.read_csv(dirpath / "All Songs-All Songs.csv")
@@ -83,7 +83,7 @@ def find_songs_from_songwriter(all_songs, info, writer_select):
     return selected_info
 
 
-@st.cache
+@st.cache_data
 def load_single_sales(dirpath: str):
     dirpath = Path(dirpath)
     single_sales = pd.read_csv(dirpath / "Single sales.csv")
@@ -92,7 +92,7 @@ def load_single_sales(dirpath: str):
     return single_sales
 
 
-@st.cache
+@st.cache_data
 def load_album_sales(dirpath: str):
     dirpath = Path(dirpath)
     album_sales = pd.read_csv(dirpath / "Album sales.csv")
@@ -126,7 +126,7 @@ def join_diacritic(text, mode="NFC"):
 
     return text
 
-@st.cache
+@st.cache_data
 def load_live_info(dirpath):
     dirpath = Path(dirpath)
     dirpath_dvd = dirpath / "DVD"

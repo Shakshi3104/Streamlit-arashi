@@ -61,74 +61,87 @@ if __name__ == "__main__":
         Album: {rap_songs[rap_songs['タイプ'] == 'アルバム']['曲名'].count()}
         """
 
-    """
-    ### ARASHI Concert Top 30
-    """
-    # コンサート披露回数が多い順に30曲
-    top30_live_songs = counted_live_songs.sort_values(by="収録回数", ascending=False)[:30]
+    # タブ
+    tabs = st.tabs(["Summary", "Table"])
 
-    # 棒グラフ
-    colors = list(map(lambda x: release_type_to_color(x), top30_live_songs["タイプ"]))
-    fig = go.Figure(
-        go.Bar(
-            x=top30_live_songs["収録回数"],
-            y=top30_live_songs["曲名"],
-            hovertext=top30_live_songs["リリース年"],
-            orientation='h',
-            hovertemplate="<b>%{y}</b> (%{hovertext}年): %{x}回<extra></extra>",
-            showlegend=False,
-            marker_color=colors,
-        ))
-    fig.update_layout(yaxis=dict(autorange="reversed"),
-                      width=None,
-                      height=None,
-                      autosize=True)
-    st.plotly_chart(fig)
+    with tabs[0]:
 
-    # AgGrid(top30_live_songs)
+        """
+        ### ARASHI Concert Top 30
+        """
+        # コンサート披露回数が多い順に30曲
+        top30_live_songs = counted_live_songs.sort_values(by="収録回数", ascending=False)[:30]
 
-    """
-    ### ARASHI Concert distribution
-    """
-    # ヒートマップ
-    # hovertextを作る
-    hovertext = songs_lives_cross[list(live_info["略称"])]
-    for live_name in live_info["略称"]:
-        full_live_name = list(live_info[live_info["略称"] == live_name]["名前"])[0]
-        hovertext[live_name] = [f"<b>{song}</b><br>({full_live_name})" if count > 0 else ""
-                                for song, count in zip(songs_lives_cross["曲名"], hovertext[live_name])]
+        # 棒グラフ
+        colors = list(map(lambda x: release_type_to_color(x), top30_live_songs["タイプ"]))
+        fig = go.Figure(
+            go.Bar(
+                x=top30_live_songs["収録回数"],
+                y=top30_live_songs["曲名"],
+                hovertext=top30_live_songs["リリース年"],
+                orientation='h',
+                hovertemplate="<b>%{y}</b> (%{hovertext}年): %{x}回<extra></extra>",
+                showlegend=False,
+                marker_color=colors,
+            ))
+        fig.update_layout(yaxis=dict(autorange="reversed"),
+                          width=None,
+                          height=None,
+                          autosize=True)
+        st.plotly_chart(fig)
 
-    fig = go.Figure(
-        go.Heatmap(
-            z=songs_lives_cross[list(live_info["略称"])],
-            x=list(live_info["略称"]),
-            y=songs_lives_cross["曲名"],
-            text=hovertext,
-            showscale=False,
-            colorscale="blues",
-            hovertemplate="%{text}<extra></extra>",
+        # AgGrid(top30_live_songs)
+
+        """
+        ### ARASHI Concert distribution
+        """
+        # ヒートマップ
+        # hovertextを作る
+        hovertext = songs_lives_cross[list(live_info["略称"])]
+        for live_name in live_info["略称"]:
+            full_live_name = list(live_info[live_info["略称"] == live_name]["名前"])[0]
+            hovertext[live_name] = [f"<b>{song}</b><br>({full_live_name})" if count > 0 else ""
+                                    for song, count in zip(songs_lives_cross["曲名"], hovertext[live_name])]
+
+        fig = go.Figure(
+            go.Heatmap(
+                z=songs_lives_cross[list(live_info["略称"])],
+                x=list(live_info["略称"]),
+                y=songs_lives_cross["曲名"],
+                text=hovertext,
+                showscale=False,
+                colorscale="blues",
+                hovertemplate="%{text}<extra></extra>",
+            )
         )
-    )
-    fig.update_layout(yaxis=dict(autorange="reversed"),
-                      width=None,
-                      height=None,
-                      autosize=True)
-    st.plotly_chart(fig)
+        fig.update_layout(yaxis=dict(autorange="reversed"),
+                          width=None,
+                          height=None,
+                          autosize=True)
+        st.plotly_chart(fig)
 
-    # テーブルで表示するか
-    show_table = st.checkbox("Show as table")
-    if show_table:
-        AgGrid(songs_lives_cross[["曲名"] + list(live_info["略称"])])
+        # テーブルで表示するか
+        show_table = st.checkbox("Show as table")
+        if show_table:
+            AgGrid(songs_lives_cross[["曲名"] + list(live_info["略称"])])
 
-    """
-    ### Find ARASHI songs from songwriters 
-    """
-    # セレクトボックスのデフォルトは嵐にしておく
-    default_writer = all_writers.index("嵐")
-    writer_select = st.selectbox(
-        "Song Writer", all_writers, default_writer
-    )
+    with tabs[1]:
+        """
+        ### Find ARASHI songs from songwriters 
+        """
+        # セレクトボックスのデフォルトは嵐にしておく
+        default_writer = all_writers.index("嵐")
+        writer_select = st.selectbox(
+            "Song Writer", all_writers, default_writer
+        )
 
-    st.write("Find ARASHI songs written by {}".format(writer_select))
-    selected_songs = utils.find_songs_from_songwriter(all_songs, info, writer_select)
-    AgGrid(selected_songs)
+        st.write("Find ARASHI songs written by {}".format(writer_select))
+        selected_songs = utils.find_songs_from_songwriter(all_songs, info, writer_select)
+        AgGrid(selected_songs)
+
+        """
+        ### All songs
+        """
+        show_all = st.checkbox("Show all songs information")
+        if show_all:
+            AgGrid(all_songs)
