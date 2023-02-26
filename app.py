@@ -76,7 +76,7 @@ if __name__ == "__main__":
     with tabs[0]:
 
         """
-        ### ARASHI Concert Top 30
+        ### Sing in Concert Top 30
         """
         # コンサート披露回数が多い順に30曲
         top30_live_songs = counted_live_songs.sort_values(by="収録回数", ascending=False)[:30]
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         # AgGrid(top30_live_songs)
 
         """
-        ### ARASHI Concert distribution
+        ### Concert distribution
         """
         # ヒートマップ
         # hovertextを作る
