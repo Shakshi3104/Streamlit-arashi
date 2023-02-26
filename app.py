@@ -62,7 +62,7 @@ if __name__ == "__main__":
         """
 
     # タブ
-    tabs = st.tabs(["Summary", "Table"])
+    tabs = st.tabs(["Concert", "Songs"])
 
     with tabs[0]:
 
