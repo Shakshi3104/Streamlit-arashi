@@ -17,7 +17,7 @@ def release_type_to_color(x) -> str:
 
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="ARASHI Songs")
+    st.set_page_config(page_title="ARASHI Songs", layout="wide")
 
     """
     # ARASHI Songs Dashboard
