@@ -1,0 +1,6 @@
+streamlit
+numpy
+pandas
+plotly
+streamlit-aggrid
+plotly-express
