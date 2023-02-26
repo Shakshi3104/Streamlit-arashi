@@ -56,29 +56,25 @@ def load_all_songs(dirpath):
 def find_songs_from_songwriter(all_songs, info, writer_select):
     names = []
     writers = []
-    infos = []
-    cds = []
+    release_year = []
 
     for i, song_info in enumerate(info):
         if writer_select in song_info["Writers"]:
             line = all_songs.iloc[i, :]
             names += [line["曲名"]]
             writers += [line["クレジット"]]
-            cds += [line["収録CD"]]
-            infos += [line["タイアップ、備考"]]
+            release_year += [line["リリース年"]]
 
         if writer_select == "櫻井翔":
             if "SHOW" in song_info["Writers"] or "Sho Sakurai" in song_info["Writers"]:
                 line = all_songs.iloc[i, :]
                 names += [line["曲名"]]
                 writers += [line["クレジット"]]
-                cds += [line["収録CD"]]
-                infos += [line["タイアップ、備考"]]
+                release_year += [line["リリース年"]]
 
-    selected_info = pd.DataFrame({"Song name": names,
-                                  "Songwriter": writers,
-                                  "CD": cds,
-                                  "Information": infos})
+    selected_info = pd.DataFrame({"曲名": names,
+                                  "クレジット": writers,
+                                  "リリース年": release_year})
 
     return selected_info
 

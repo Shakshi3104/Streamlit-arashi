@@ -6,14 +6,19 @@ from utils import utils
 
 
 if __name__ == "__main__":
+    st.set_page_config(layout="wide")
+
     """
     # ARASHI
-    ## Find ARASHI's songs from songwriters 
     """
 
     dirpath = "./data/"
     all_songs, all_writers, info = utils.load_all_songs(dirpath)
+    songs_lives_cross, counted_live_songs, live_info = utils.load_live_info(dirpath)
 
+    """
+    ### Find ARASHI's songs from songwriters 
+    """
     # セレクトボックスのデフォルトは嵐にしておく
     default_writer = all_writers.index("嵐")
     writer_select = st.selectbox(
