@@ -27,14 +27,14 @@ if __name__ == "__main__":
     dirpath = "./data/"
     all_songs, all_writers, info = loader.load_all_songs(dirpath)
     songs_lives_cross, counted_live_songs, live_info = loader.load_live_info(dirpath)
-    play_counts = music_parser.load_arashi_play_counts(dirpath)
+    play_counts, date_ = music_parser.load_arashi_play_counts(dirpath)
 
     # 全曲リストとライブで披露された回数をマージする
     counted_live_songs = pd.merge(counted_live_songs, all_songs)
     songs_lives_cross = pd.merge(all_songs, songs_lives_cross, left_on="曲名", right_on="曲名").fillna(0)
 
     # サマリー
-    cols = st.columns(3)
+    cols = st.columns(4)
     # リリースされた曲数
     with cols[0]:
         st.metric("All songs", f"{all_songs['曲名'].count()}")
@@ -53,6 +53,7 @@ if __name__ == "__main__":
         Album: {counted_live_songs[counted_live_songs['タイプ'] == 'アルバム']['曲名'].count()}
         """
 
+    # Rap詞: 櫻井翔がある曲数
     with cols[2]:
         rap_songs = loader.find_songs_from_songwriter(all_songs, info, "櫻井翔")
         st.metric("Songs with rap by Sho Sakurai", f"{rap_songs['曲名'].count()}")
@@ -60,6 +61,13 @@ if __name__ == "__main__":
         Single: {rap_songs[rap_songs['タイプ'] == 'シングル']['曲名'].count()}, 
         c/w: {rap_songs[rap_songs['タイプ'] == 'カップリング']['曲名'].count()}, 
         Album: {rap_songs[rap_songs['タイプ'] == 'アルバム']['曲名'].count()}
+        """
+
+    # 総再生回数
+    with cols[3]:
+        st.metric("All play counts", f"{int(play_counts['Play Count'].sum())}")
+        f"""
+        By {date_.strftime('%Y/%m/%d')}
         """
 
     # タブ

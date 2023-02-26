@@ -15,11 +15,11 @@ def load_music_library(dirpath):
 
     tracks = pd.DataFrame(list(library_plist["Tracks"].values()))
 
-    return tracks
+    return tracks, library_plist["Date"]
 
 
 def load_arashi_play_counts(dirpath):
-    tracks = load_music_library(dirpath)
+    tracks, date_ = load_music_library(dirpath)
     tracks = tracks[tracks["Artist"] == "嵐"].reset_index(drop=True)
 
     # 表記揺れを直す
@@ -50,9 +50,10 @@ def load_arashi_play_counts(dirpath):
     tracks = tracks[["Name", "Play Count"]]
     play_counts = tracks.groupby(by="Name").sum().reset_index().rename(columns={0: "Name"})
 
-    return play_counts
+    return play_counts, date_
 
 
 if __name__ == "__main__":
     dirpath = "../data/"
-    counts = load_arashi_play_counts(dirpath)
+    counts, date_ = load_arashi_play_counts(dirpath)
+
