@@ -14,6 +14,7 @@ def load_music_library(dirpath):
         library_plist = plistlib.load(f)
 
     tracks = pd.DataFrame(list(library_plist["Tracks"].values()))
+    tracks["Play Count"] = tracks["Play Count"].fillna(0)
 
     return tracks, library_plist["Date"]
 
