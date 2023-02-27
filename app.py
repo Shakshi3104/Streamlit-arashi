@@ -78,8 +78,17 @@ if __name__ == "__main__":
         """
         ### Sing in Concert Top 30
         """
+        # リリースタイプの選択
+        selected_types_live = st.multiselect(
+            label="Release type",
+            options=["シングル", "カップリング", "アルバム"],
+            default=["シングル", "カップリング", "アルバム"],
+            key="live"
+        )
+        selected_counted_live_song = counted_live_songs[counted_live_songs["タイプ"].isin(selected_types_live)]
+
         # コンサート披露回数が多い順に30曲
-        top30_live_songs = counted_live_songs.sort_values(by="収録回数", ascending=False)[:30]
+        top30_live_songs = selected_counted_live_song.sort_values(by="収録回数", ascending=False)[:30]
 
         # 棒グラフ
         colors = list(map(lambda x: release_type_to_color(x), top30_live_songs["タイプ"]))
@@ -155,7 +164,17 @@ if __name__ == "__main__":
         """
         ### Play Top 30
         """
-        top30_play_songs = play_counts.sort_values(by="Play Count", ascending=False)[:30]
+        # リリースタイプの選択
+        selected_types_play = st.multiselect(
+            label="Release type",
+            options=["シングル", "カップリング", "アルバム"],
+            default=["シングル", "カップリング", "アルバム"],
+            key="play"
+        )
+        selected_play_counts = play_counts[play_counts["タイプ"].isin(selected_types_play)]
+
+        # 再生回数Top30
+        top30_play_songs = selected_play_counts.sort_values(by="Play Count", ascending=False)[:30]
 
         # 棒グラフ
         colors = list(map(lambda x: release_type_to_color(x), top30_play_songs["タイプ"]))
