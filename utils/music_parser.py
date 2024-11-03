@@ -1,12 +1,13 @@
 import pandas as pd
 import plistlib
+import datetime
 
 from pathlib import Path
 
 from .utils import join_diacritic
 
 
-def load_music_library(dirpath):
+def load_music_library(dirpath) -> (pd.DataFrame, datetime.datetime):
     dirpath = Path(dirpath)
     filepath = dirpath / "music-library.xml"
 
@@ -19,7 +20,7 @@ def load_music_library(dirpath):
     return tracks, library_plist["Date"]
 
 
-def load_arashi_play_counts(dirpath):
+def load_arashi_play_counts(dirpath) -> (pd.DataFrame, datetime.datetime):
     tracks, date_ = load_music_library(dirpath)
     tracks = tracks[tracks["Album Artist"] == "嵐"].reset_index(drop=True)
 
