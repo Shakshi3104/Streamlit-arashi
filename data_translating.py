@@ -27,6 +27,6 @@ if __name__ == "__main__":
     # CSVファイルに書き出す
     s_format = '%Y%m%d_%H%M'
     date_str = date_.strftime(s_format)
-    filename = f"arashi-songs_{date_str}.csv"
+    filename = f"arashi_songs_{date_str}.csv"
 
     mart_table.to_csv(dirpath + filename, encoding="utf-8_sig")
