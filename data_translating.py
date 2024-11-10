@@ -22,9 +22,10 @@ if __name__ == "__main__":
     # 型を変換
     mart_table["再生回数"] = mart_table["再生回数"].astype(int)
     mart_table["収録回数"] = mart_table["収録回数"].astype(int)
+    mart_table["再生回数_日付"] = date_.strftime("%Y/%m/%d %H:%M:%S")
 
     # CSVファイルに書き出す
-    s_format = '%Y%m%d-%H%M'
+    s_format = '%Y%m%d_%H%M'
     date_str = date_.strftime(s_format)
     filename = f"arashi-songs_{date_str}.csv"
 
