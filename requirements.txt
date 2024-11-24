@@ -4,3 +4,7 @@ pandas
 plotly
 streamlit-aggrid
 plotly-express
+
+beautifulsoup4
+requests-html
+lxml_html_clean
